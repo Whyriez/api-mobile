@@ -41,6 +41,36 @@ export const Me = async (req, res) => {
   }
 };
 
+export const ValidateUser = async (req, res) => {
+  const user = await Users.findOne({
+    attributes: ["uuid", "name", "email", "role"],
+    where: {
+      name: req.params.name,
+    },
+  });
+  if (!user) return res.status(404).json({ message: "User Not Found" });
+  res.status(200).json({
+    data: user,
+    code: 200,
+    message: "Ada Data",
+  });
+};
+
+export const ValidateEmail = async (req, res) => {
+  const user = await Users.findOne({
+    attributes: ["uuid", "name", "email", "role"],
+    where: {
+      email: req.params.email,
+    },
+  });
+  if (!user) return res.status(404).json({ message: "User Not Found" });
+  res.status(200).json({
+    data: user,
+    code: 200,
+    message: "Ada Data",
+  });
+};
+
 // export const Me = async (req, res) => {
 //   if (!req.session.userId) {
 //     return res.status(401).json({ msg: "Mohon login ke akun Anda!" });
