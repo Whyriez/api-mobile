@@ -43,6 +43,21 @@ export const getPesanDById = async (req, res) => {
 export const createPesan = async (req, res) => {
   try {
     await Pesan.create(req.body);
+    request({
+      url: "https://fcm.googleapis.com/fcm/send",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: ["key", process.env.SERVER_KEY].join("="),
+      },
+      json: {
+        to: req.body.token,
+        notification: {
+          title: "Anda mempunyai sebuah pertanyaan baru",
+          body: "klik untuk membuka!",
+        },
+      },
+    });
     res.status(201).json({ msg: "Pesan Created" });
   } catch (error) {
     console.log(error.message);
